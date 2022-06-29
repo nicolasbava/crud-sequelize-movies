@@ -17,15 +17,26 @@
     <section class="formulario">
         <form action="/movies/create" method="POST">
             <label for="title">Title </label>
-            <p><input type="text" name="title" id="" required></p>
+            <p><input type="text" name="title" id="" ></p>
             <label for="rating">Rating </label>
-            <p><input type="number" name="rating" id="" required> </p>
+            <p><input type="number" name="rating" id="" > </p>
             <label for="awards">Awards </label>
-            <p><input type="number" name="awards" id="" required></p>
+            <p><input type="number" name="awards" id="" ></p>
             <label for="release_date">Release date </label>
-            <p><input type="date" name="release_date" id="" required></p>
+            <p><input type="date" name="release_date" id="" ></p>
             <label for="length">Length </label>
-            <p><input type="number" name="length" id="" required></p>
+            <p><input type="number" name="length" id="" ></p>
+            <p>
+                <label for="genre_id">Genre:</label>
+                <select name="genre_id" id="" >
+                    
+                    <option value="" disabled selected >-select genre-</option>
+                    <% allGenres.forEach(genre=> { %>
+                        <option value="<%= genre.id %>"><%= genre.name %></option>
+                    <% }) %>
+                    <option value=""></option>
+                </select>
+            </p>
 
             <br>
             <p> <button class="botonAgregar" type="submit">Agregar</button>

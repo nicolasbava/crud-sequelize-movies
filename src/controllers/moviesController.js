@@ -3,6 +3,7 @@ const sequelize = db.sequelize;
 
 //Otra forma de llamar a los modelos
 const Movies = db.Movie;
+const Genres = db.Genre
 
 const moviesController = {
     'list': (req, res) => {
@@ -42,9 +43,10 @@ const moviesController = {
             });
     }, //Aqui debemos modificar y completar lo necesario para trabajar con el CRUD
     add: function (req, res) {
-        
-            res.render("moviesAdd")
 
+        db.Genre.findAll({})
+            .then((allGenres)=> (res.render('moviesAdd', {allGenres})))
+        
     },
     create: function (req, res) {
  
@@ -67,9 +69,20 @@ const moviesController = {
         
         let movieId = req.params.id
 
-        db.Movie.findByPk(movieId)
+        let promMovies = Movies.findByPk(movieId, {include: ['genre']})
+        // aca arriba en el include uso la relacion que use en el Modelo: Movie y pongo el nombre que puse en la relacion de peliculas con generos en el lugar 'as' -> as: 'genre'
 
-        .then(Movie => res.render("moviesEdit", {Movie}))
+        let promGenres = Genres.findAll()
+
+        // Creo una promesa para mandar los 2 datos juntos, allGenres y Movie
+
+        Promise
+        .all([promMovies,promGenres])
+        // aca con el orden/indice del array me manda el archivo que debe ser. aca abajo ▼ ▼ ▼
+        .then(([Movie,allGenres])=>{
+            res.render('moviesEdit', {Movie,allGenres})
+        }) 
+        //.then(Movie => res.render("moviesEdit", {Movie}))
     },
 
 
@@ -108,7 +121,7 @@ const moviesController = {
 
         db.Movie.destroy({
 
-            where: { id: movieId}
+            where: {id: movieId}
 
         }).then(() => res.redirect("/movies"))
 
